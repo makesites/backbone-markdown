@@ -9,19 +9,19 @@
 
 	APP.Views.Markdown = APP.View.extend({
 		options: {
-			template: APP.Templates.Markdown, 
-			htmlRoot: "assets/html/" // with trailing slash please...
-		}, 
-		
+			template: APP.Templates.Markdown,
+			mdRoot: "assets/html/" // with trailing slash please...
+		},
+
 		events: {
 			"click a" : "processLink"
 		},
-		
+
 		initialize: function( options ){
-			// 
+			//
 			var page = _.ucwords( options.page );
-			options.url = this.options.htmlRoot + page +".md";
-			// 
+			options.url = this.options.mdRoot + page +".md";
+			//
 			return APP.View.prototype.initialize.apply( this, options );
 		},
 
@@ -38,7 +38,7 @@
 		}
 
 	});
-	
+
 	// Helpers
 	_.mixin({
 		// Uppercase the first character of each word in a string
@@ -49,6 +49,6 @@
 		  });
 		}
 	});
-	
+
 
 })(this.jQuery, this._, this.Backbone);
