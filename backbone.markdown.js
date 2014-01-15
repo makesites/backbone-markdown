@@ -22,7 +22,7 @@
 			var page = _.ucwords( options.page );
 			options.url = this.options.mdRoot + page +".md";
 			//
-			return APP.View.prototype.initialize.apply( this, options );
+			return APP.View.prototype.initialize.call( this, options );
 		},
 
 		processLink : function( e ){
