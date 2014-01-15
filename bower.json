@@ -1,0 +1,12 @@
+{
+	"name": "backbone.markdown",
+	"version": "0.1.0",
+	"main": ["./backbone.markdown.js"],
+	"dependencies": {
+			"backbone": "1.0.0",
+			"jquery": "2.0.3",
+			"underscore": "1.4.4",
+			"backbone.app": "0.9.4",
+			"showdown": "0.3.1"
+	}
+}
