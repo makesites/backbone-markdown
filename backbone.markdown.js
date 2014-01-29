@@ -1,8 +1,19 @@
-// Markdown
-// Source: https://gist.github.com/tracend/8434259
+/* Backbone Markdown
+ * Source: https://github.com/makesites/backbone-markdown
+ * Copyright © Makesites.org
+ *
+ * Initiated by Makis Tracend (@tracend)
+ * Distributed through [Makesites.org](http://makesites.org)
+ * Released under the [MIT license](http://makesites.org/licenses/MIT)
+ */
 (function($, _, Backbone) {
 
-	// Set markdown template
+	// Supports a template written in markdown
+	// ( showdown.js assumed loaded )
+	// options:
+	// - url : for a file containing the temaplte
+	// - html : for a string directly used as the template
+	//
 	APP.Templates.Markdown = APP.Template.extend({
 		compile: (new Showdown.converter()).makeHtml
 	});
@@ -40,6 +51,7 @@
 	});
 
 	// Helpers
+	// Source: https://gist.github.com/tracend/8434259
 	_.mixin({
 		// Uppercase the first character of each word in a string
 		// From: http://phpjs.org/functions/ucwords/
