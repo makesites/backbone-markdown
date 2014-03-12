@@ -31,7 +31,7 @@
 		initialize: function( options ){
 			//
 			var page = _.ucwords( options.page );
-			options.url = this.options.mdRoot + page +".md";
+			this.options.url = this.options.mdRoot + page +".md";
 			//
 			return APP.View.prototype.initialize.call( this, options );
 		},
