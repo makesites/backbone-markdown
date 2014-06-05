@@ -21,7 +21,8 @@
 	APP.Views.Markdown = APP.View.extend({
 		options: {
 			template: APP.Templates.Markdown,
-			mdRoot: "assets/html/" // with trailing slash please...
+			mdRoot: "assets/html/", // with trailing slash please...
+			parseName: false
 		},
 
 		events: {
@@ -30,7 +31,7 @@
 
 		initialize: function( options ){
 			//
-			var page = _.ucwords( options.page );
+			var page = ( options. parseName || this.options. parseName ) ? this._parseName( options.page ) : options.page;
 			this.options.url = this.options.mdRoot + page +".md";
 			//
 			return APP.View.prototype.initialize.call( this, options );
@@ -46,6 +47,14 @@
 			url= url.replace("./wiki", "").replace("./", "");
 			// goto the new page
 			app.navigate(url, true);
+		},
+
+		// bridges the gap between the url and the actual filename
+		// update with your own logic
+		_parseName: function ( page ){
+			// by default just capitalizing page name
+			var page = _.ucwords( page );
+			return page;
 		}
 
 	});
