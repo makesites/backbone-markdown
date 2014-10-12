@@ -2,7 +2,7 @@
  * @name backbone.markdown
  * A Backbone.js extension to automatically load Markdown pages as views 
  *
- * Version: 0.2.0 (Sun, 12 Oct 2014 02:58:27 GMT)
+ * Version: 0.3.0 (Sun, 12 Oct 2014 03:54:19 GMT)
  * Source: http://github.com/makesites/backbone-markdown
  *
  * @author makesites
@@ -13,7 +13,22 @@
  * @license Released under the [MIT license](http://makesites.org/licenses/MIT)
  */
 
-(function($, _, Backbone) {
+(function (lib) {
+
+	//"use strict";
+
+	if (typeof define === 'function' && define.amd) {
+		// AMD. Register as an anonymous module.
+		define(['jquery', 'underscore', 'backbone', 'backbone.app'], lib);
+	} else {
+		// Browser globals
+		lib(window.jQuery, window._, window.Backbone, window.APP);
+	}
+}(function ($, _, Backbone, APP) {
+
+	// support for Backbone APP() view if available...
+	var isAPP = ( typeof APP !== "undefined" && typeof APP.View !== "undefined" );
+	var View = ( isAPP ) ? APP.View : Backbone.View;
 
 
 
@@ -37,14 +52,14 @@
 	// - url : for a file containing the temaplte
 	// - html : for a string directly used as the template
 	//
-	APP.Templates.Markdown = APP.Template.extend({
+	var Template = APP.Template.extend({
 		compile: (new Showdown.converter()).makeHtml
 	});
 
 
-	APP.Views.Markdown = APP.View.extend({
+	var Markdown = View.extend({
 		options: {
-			template: APP.Templates.Markdown,
+			template: Template,
 			mdRoot: "assets/html/", // with trailing slash please...
 			parseName: false
 		},
@@ -85,4 +100,23 @@
 
 
 
-})(this.jQuery, this._, this.Backbone);
+	// Support module loaders
+	if ( typeof module === "object" && module && typeof module.exports === "object" ) {
+		// Expose as module.exports in loaders that implement CommonJS module pattern.
+		module.exports = Markdown;
+	}
+	// If there is a window object, that at least has a document property
+	if ( typeof window === "object" && typeof window.document === "object" ) {
+		// update APP namespace
+		if( isAPP ){
+			APP.Templates.Markdown = Template;
+			APP.Views.Markdown = Markdown;
+			// save namespace
+			window.APP = APP;
+		}
+		// update Backbone namespace regardless
+		Backbone.Markdown = Markdown;
+		window.Backbone = Backbone;
+	}
+
+}));
