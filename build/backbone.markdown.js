@@ -1,12 +1,35 @@
-/* Backbone Markdown
- * Source: https://github.com/makesites/backbone-markdown
- * Copyright © Makesites.org
+/**
+ * @name backbone.markdown
+ * A Backbone.js extension to automatically load Markdown pages as views 
  *
- * Initiated by Makis Tracend (@tracend)
+ * Version: 0.2.0 (Sun, 12 Oct 2014 02:58:27 GMT)
+ * Source: http://github.com/makesites/backbone-markdown
+ *
+ * @author makesites
+ * Initiated by: Makis Tracend (@tracend)
  * Distributed through [Makesites.org](http://makesites.org)
- * Released under the [MIT license](http://makesites.org/licenses/MIT)
+ *
+ * @cc_on Copyright © Makesites.org
+ * @license Released under the [MIT license](http://makesites.org/licenses/MIT)
  */
+
 (function($, _, Backbone) {
+
+
+
+	// Helpers
+	// Source: https://gist.github.com/tracend/8434259
+	_.mixin({
+		// Uppercase the first character of each word in a string
+		// From: http://phpjs.org/functions/ucwords/
+		ucwords : function(str) {
+			return (str + '').replace(/^([a-z])|\s+([a-z])|-([a-z])/g, function ($1) {
+				return $1.toUpperCase();
+			});
+		}
+	});
+
+
 
 	// Supports a template written in markdown
 	// ( showdown.js assumed loaded )
@@ -17,6 +40,7 @@
 	APP.Templates.Markdown = APP.Template.extend({
 		compile: (new Showdown.converter()).makeHtml
 	});
+
 
 	APP.Views.Markdown = APP.View.extend({
 		options: {
@@ -53,23 +77,12 @@
 		// update with your own logic
 		_parseName: function ( page ){
 			// by default just capitalizing page name
-			var page = _.ucwords( page );
+			page = _.ucwords( page );
 			return page;
 		}
 
 	});
 
-	// Helpers
-	// Source: https://gist.github.com/tracend/8434259
-	_.mixin({
-		// Uppercase the first character of each word in a string
-		// From: http://phpjs.org/functions/ucwords/
-		ucwords : function(str) {
-		  return (str + '').replace(/^([a-z])|\s+([a-z])|-([a-z])/g, function ($1) {
-			return $1.toUpperCase();
-		  });
-		}
-	});
 
 
 })(this.jQuery, this._, this.Backbone);
