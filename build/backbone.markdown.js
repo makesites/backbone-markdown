@@ -2,7 +2,7 @@
  * @name backbone.markdown
  * A Backbone.js extension to automatically load Markdown pages as views 
  *
- * Version: 0.3.0 (Sun, 12 Oct 2014 03:54:19 GMT)
+ * Version: 0.3.0 (Sun, 12 Oct 2014 05:51:33 GMT)
  * Source: http://github.com/makesites/backbone-markdown
  *
  * @author makesites
