@@ -2,7 +2,7 @@
  * @name backbone.markdown
  * A Backbone.js extension to automatically load Markdown pages as views 
  *
- * Version: 0.3.0 (Sun, 12 Oct 2014 05:51:33 GMT)
+ * Version: 0.3.0 (Fri, 14 Nov 2014 15:00:42 GMT)
  * Source: http://github.com/makesites/backbone-markdown
  *
  * @author makesites
@@ -19,10 +19,15 @@
 
 	if (typeof define === 'function' && define.amd) {
 		// AMD. Register as an anonymous module.
-		define(['jquery', 'underscore', 'backbone', 'backbone.app'], lib);
+		var deps = ['jquery', 'underscore', 'backbone', 'backbone.app']; // condition when backbone.app is part of the array?
+		define(deps, lib);
+	} else if ( typeof module === "object" && module && typeof module.exports === "object" ){
+		// Expose as module.exports in loaders that implement CommonJS module pattern.
+		module.exports = lib;
 	} else {
 		// Browser globals
-		lib(window.jQuery, window._, window.Backbone, window.APP);
+		var Query = window.jQuery || window.Zepto || window.vQuery;
+		lib(Query, window._, window.Backbone, window.APP);
 	}
 }(function ($, _, Backbone, APP) {
 
@@ -100,23 +105,23 @@
 
 
 
-	// Support module loaders
-	if ( typeof module === "object" && module && typeof module.exports === "object" ) {
-		// Expose as module.exports in loaders that implement CommonJS module pattern.
-		module.exports = Markdown;
+	// update Backbone namespace regardless
+	Backbone.Markdown = Markdown;
+	if( isAPP ){
+		APP.Templates.Markdown = Template;
+		APP.Views.Markdown = Markdown;
 	}
+
 	// If there is a window object, that at least has a document property
 	if ( typeof window === "object" && typeof window.document === "object" ) {
+		window.Backbone = Backbone;
 		// update APP namespace
 		if( isAPP ){
-			APP.Templates.Markdown = Template;
-			APP.Views.Markdown = Markdown;
-			// save namespace
 			window.APP = APP;
 		}
-		// update Backbone namespace regardless
-		Backbone.Markdown = Markdown;
-		window.Backbone = Backbone;
 	}
+
+	// for module loaders:
+	return Markdown;
 
 }));
