@@ -2,7 +2,7 @@
  * @name backbone.markdown
  * A Backbone.js extension to automatically load Markdown pages as views 
  *
- * Version: 0.3.0 (Fri, 14 Nov 2014 15:00:42 GMT)
+ * Version: 0.3.0 (Thu, 18 Dec 2014 11:14:43 GMT)
  * Source: http://github.com/makesites/backbone-markdown
  *
  * @author makesites
@@ -19,7 +19,7 @@
 
 	if (typeof define === 'function' && define.amd) {
 		// AMD. Register as an anonymous module.
-		var deps = ['jquery', 'underscore', 'backbone', 'backbone.app']; // condition when backbone.app is part of the array?
+		var deps = ['jquery', 'underscore', 'backbone']; // condition when backbone.app is part of the array?
 		define(deps, lib);
 	} else if ( typeof module === "object" && module && typeof module.exports === "object" ){
 		// Expose as module.exports in loaders that implement CommonJS module pattern.
@@ -27,14 +27,14 @@
 	} else {
 		// Browser globals
 		var Query = window.jQuery || window.Zepto || window.vQuery;
-		lib(Query, window._, window.Backbone, window.APP);
+		lib(Query, window._, window.Backbone);
 	}
-}(function ($, _, Backbone, APP) {
+}(function ($, _, Backbone) {
 
 	// support for Backbone APP() view if available...
-	var isAPP = ( typeof APP !== "undefined" && typeof APP.View !== "undefined" );
-	var View = ( isAPP ) ? APP.View : Backbone.View;
-
+	var APP  = window.APP || false;
+	var isAPP = ( APP !== false );
+	var View = ( isAPP && typeof APP.View !== "undefined" ) ? APP.View : Backbone.View;
 
 
 	// Helpers
@@ -57,10 +57,12 @@
 	// - url : for a file containing the temaplte
 	// - html : for a string directly used as the template
 	//
-	var Template = APP.Template.extend({
-		compile: (new Showdown.converter()).makeHtml
-	});
-
+	var compiler = (new Showdown.converter()).makeHtml;
+	var Template = ( isAPP && APP.Template ) ?
+		APP.Template.extend({
+			compile: compiler
+		}) :
+		compiler;
 
 	var Markdown = View.extend({
 		options: {
@@ -78,7 +80,7 @@
 			var page = ( options. parseName || this.options. parseName ) ? this._parseName( options.page ) : options.page;
 			this.options.url = this.options.mdRoot + page +".md";
 			//
-			return APP.View.prototype.initialize.call( this, options );
+			return View.prototype.initialize.call( this, options );
 		},
 
 		processLink: function( e ){
