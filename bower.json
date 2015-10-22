@@ -1,6 +1,6 @@
 {
 	"name": "backbone.markdown",
-	"version": "0.3.0",
+	"version": "0.3.5",
 	"description": "A Backbone.js extension to automatically load Markdown pages as views ",
 	"license": "MIT",
 	"author": "makesites",

@@ -2,7 +2,7 @@
  * @name backbone.markdown
  * A Backbone.js extension to automatically load Markdown pages as views 
  *
- * Version: 0.3.0 (Thu, 18 Dec 2014 11:14:43 GMT)
+ * Version: 0.3.5 (Thu, 22 Oct 2015 13:22:16 GMT)
  * Source: http://github.com/makesites/backbone-markdown
  *
  * @author makesites
@@ -19,18 +19,20 @@
 
 	if (typeof define === 'function' && define.amd) {
 		// AMD. Register as an anonymous module.
-		var deps = ['jquery', 'underscore', 'backbone']; // condition when backbone.app is part of the array?
-		define(deps, lib);
+		var deps = ['jquery', 'underscore', 'backbone', 'showdown']; // condition when backbone.app is part of the array?
+		define('backbone.markdown', deps, lib);
 	} else if ( typeof module === "object" && module && typeof module.exports === "object" ){
 		// Expose as module.exports in loaders that implement CommonJS module pattern.
 		module.exports = lib;
 	} else {
 		// Browser globals
 		var Query = window.jQuery || window.Zepto || window.vQuery;
-		lib(Query, window._, window.Backbone);
+		lib(Query, window._, window.Backbone, window.Showdown);
 	}
-}(function ($, _, Backbone) {
+}(function ($, _, Backbone, Showdown) {
 
+	// global scope
+	window = window || this.window || {};
 	// support for Backbone APP() view if available...
 	var APP  = window.APP || false;
 	var isAPP = ( APP !== false );
@@ -67,8 +69,9 @@
 	var Markdown = View.extend({
 		options: {
 			template: Template,
+			parseName: false,
 			mdRoot: "assets/html/", // with trailing slash please...
-			parseName: false
+			pathRoot: ""
 		},
 
 		events: {
@@ -86,7 +89,8 @@
 		processLink: function( e ){
 			e.preventDefault();
 			var el = ( e.target.tagName == "A") ?  $(e.target) : $(e.target).closest("a");
-			var url= el.attr("href");
+			var url = this.options.pathRoot;
+			url += el.attr("href");
 			// if a full http link allow the clickthrough
 			if(/(file|http).*/.test(url)) window.location = url;
 			// 'clean' all the wiki paths
