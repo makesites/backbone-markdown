@@ -2,7 +2,7 @@
  * @name backbone.markdown
  * A Backbone.js extension to automatically load Markdown pages as views 
  *
- * Version: 0.3.5 (Thu, 22 Oct 2015 13:22:16 GMT)
+ * Version: 0.3.6 (Wed, 20 Apr 2016 03:33:42 GMT)
  * Source: http://github.com/makesites/backbone-markdown
  *
  * @author makesites
@@ -37,6 +37,8 @@
 	var APP  = window.APP || false;
 	var isAPP = ( APP !== false );
 	var View = ( isAPP && typeof APP.View !== "undefined" ) ? APP.View : Backbone.View;
+	// prerequisite #1
+	if( !Showdown ) return null; // throw error?
 
 
 	// Helpers
@@ -59,12 +61,26 @@
 	// - url : for a file containing the temaplte
 	// - html : for a string directly used as the template
 	//
-	var compiler = (new Showdown.converter()).makeHtml;
+
+	// init compiler
+	var compiler;
+	if( Showdown.Converter ){
+		// newer API...
+		var lib = new Showdown.Converter();
+		compiler = lib.makeHtml.bind(lib);
+	} else {
+		// legacy API < v1
+		compiler = (new Showdown.converter()).makeHtml;
+	}
+	// prerequisite #2
+	if( !compiler ) return null;
+
 	var Template = ( isAPP && APP.Template ) ?
 		APP.Template.extend({
 			compile: compiler
 		}) :
 		compiler;
+
 
 	var Markdown = View.extend({
 		options: {
