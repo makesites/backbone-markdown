@@ -8,7 +8,7 @@ A Backbone.js extension to automatically load Markdown pages in views
 This version is expecting these libraries already loaded:
 
 * [Backbone APP](https://github.com/makesites/backbone-app)
-* [Showdown](https://github.com/coreyti/showdown)
+* [Showdown](https://github.com/showdownjs/showdown)
 
 Future version may deprecate the need of the APP()
 
